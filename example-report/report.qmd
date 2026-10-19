@@ -1,0 +1,101 @@
+---
+title: "An interactive report without a server"
+author: "Workshop example"
+format:
+  html:
+    toc: true
+    resources:
+      - shinylive-sw.js
+filters:
+  - shinylive
+---
+
+This example report shows the "report" half of Shinylive: **static** prose and figures, plus
+**live** Shiny widgets that run entirely in the browser via webR. It hosts on any static web
+service because the rendered output is plain files.
+
+Also see the standalone-app half, in `material/apps/penguins-app/`, which is exported with
+`shinylive::export()`.
+
+## A static section
+
+This paragraph and the figure below are computed **at render time**: they are baked into the
+page as an image. They do not change after publishing.
+
+```{r}
+#| label: fig-static
+#| fig-cap: "A static figure, computed at build time"
+library(ggplot2)
+ggplot2::mpg |>
+  ggplot(aes(hwy)) +
+  geom_histogram(bins = 20, fill = "#2E7D6B", color = "white")
+```
+
+See @fig-static: it is immutable once rendered. By contrast, the widget that follows is live.
+
+## A live section
+
+The block below is a complete Shiny app, wrapped in a `{shinylive-r}` block. It reacts in the
+reader's browser, with no R server involved.
+
+```{shinylive-r}
+#| standalone: true
+#| markup: code
+#| viewerHeight: 460
+
+library(shiny)
+
+ui <- fluidPage(
+  sliderInput("n", "Sample size", min = 10, max = 500, value = 100),
+  plotOutput("hist")
+)
+
+server <- function(input, output, session) {
+  output$hist <- renderPlot({
+    hist(rnorm(input$n), col = "#2E7D6B", main = "Standard normal")
+  })
+}
+
+shinyApp(ui, server)
+```
+
+## A second, data-driven live widget
+
+Here is a widget that works on a small bundled dataset. Because the package list is resolved
+from the block, only what the block needs is shipped.
+
+```{shinylive-r}
+#| standalone: true
+#| layout: vertical
+#| viewerHeight: 520
+
+library(shiny)
+
+ui <- fluidPage(
+  selectInput("var", "Variable",
+              choices = c("bill_length_mm", "bill_depth_mm", "body_mass_g")),
+  plotOutput("hist")
+)
+
+server <- function(input, output, session) {
+  penguins <- palmerpenguins::penguins  # small, always available demo data
+  output$hist <- renderPlot({
+    hist(penguins[[input$var]], col = "#4A5899", main = input$var)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+## Sharing
+
+Render this file, then publish the HTML anywhere static:
+
+```
+quarto publish gh-pages
+quarto publish netlify
+quarto publish quarto-pub
+```
+
+Or zip the folder and send it: a collaborator unzips and opens the HTML to run the widgets
+locally, fully offline.

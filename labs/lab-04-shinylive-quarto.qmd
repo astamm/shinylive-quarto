@@ -1,0 +1,124 @@
+---
+title: "Lab 4 · An interactive Quarto report, hosted statically"
+author: "Workshop participant"
+format: html
+editor: source
+engine: knitr
+---
+
+## Goal
+
+Turn a Quarto report into an **interactive** page: prose and static figures plus live Shiny
+widgets, all running in the browser via Shinylive, and host the result on a **static** web
+service (GitHub Pages or Netlify). This is the "report" half of the Shinylive story, powered by
+the Quarto extension `quarto-ext/shinylive`.
+
+---
+
+## 1. Install the Quarto shinylive extension
+
+In a terminal in your Quarto project folder:
+
+```bash
+quarto add quarto-ext/shinylive
+```
+
+This adds `_extensions/quarto-ext/shinylive` to your project. You also need the `shinylive` R
+package (already installed in Lab 3) for the R variant.
+
+## 2. Create an interactive report
+
+Create a new file `report.qmd` in `material/labs/` (or your own folder). Start with this header:
+
+````markdown
+---
+title: "My interactive report"
+format: html
+filters:
+  - shinylive
+---
+
+A report with a live widget. Drag the slider:
+
+```{shinylive-r}
+#| standalone: true
+#| components: [editor]
+
+library(shiny)
+ui <- fluidPage(
+  sliderInput("n", "Samples", 10, 500, 100),
+  plotOutput("hist")
+)
+server <- function(input, output, session) {
+  output$hist <- renderPlot({
+    hist(rnorm(input$n), col = "#2E7D6B", main = "")
+  })
+}
+shinyApp(ui, server)
+```
+````
+
+Render with `quarto render report.qmd` (or the Render button). Open the HTML. The widget runs
+entirely in the browser.
+
+## 3. Mix static and interactive content
+
+Add a normal R chunk that produces a **static** figure (rendered at build time), then add a
+second `{shinylive-r}` block. Notice the difference:
+
+- static figures are baked into the page as images;
+- Shinylive blocks are live, shipped as WebAssembly, and react in the reader's browser.
+
+## 4. Handle the service-worker resource
+
+Before sharing, make sure the Shinylive service worker is included as a project resource,
+otherwise collaborators may see a blank page. Add to `report.qmd`:
+
+````markdown
+---
+format:
+  html:
+    resources:
+      - shinylive-sw.js
+---
+````
+
+## 5. Deploy to a static host
+
+Because the rendered report is plain files, deploy it anywhere static.
+
+### GitHub Pages (recommended)
+
+Push your project to a GitHub repo, then enable Pages on the branch that holds the rendered
+`report.html` (or deploy `_output/`). Or run:
+
+```bash
+quarto publish gh-pages
+```
+
+### Netlify / Quarto Pub
+
+```bash
+quarto publish netlify
+quarto publish quarto-pub
+```
+
+:::{.callout-tip}
+**Sharing privately, no internet:** render locally, locate the HTML, zip the folder, and send it.
+Your collaborator unzips and double-clicks the HTML: the interactive Shiny runs locally in their
+browser, entirely offline.
+:::
+
+## 6. Stretch: automate with GitHub Actions
+
+For a standalone **app** repo, add `.github/workflows/deploy-app.yaml` based on the
+`posit-dev/r-shinylive` reusable workflow (`deploy-app.yaml`). It reinstalls R + packages, runs
+`shinylive::export()`, and deploys `site/` to Pages on push.
+
+For a Quarto **report** repo, the pattern is the same but you render the report instead of
+exporting an app, then deploy the output folder to Pages.
+
+---
+
+**You are done with Lab 4 and the workshop.** You can now produce and publish interactive,
+serverless R reports and apps from a static web page.

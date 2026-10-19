@@ -1,0 +1,39 @@
+project:
+  type: website
+  render:
+    - index.qmd
+  pre-render: build-site.sh
+  output-dir: _site
+  resources:
+    # Whatever build-site.sh leaves in build/ is copied into _site as-is.
+    - build/**
+
+website:
+  title: "Serverless Interactive Reporting"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.html
+      - text: "Slides"
+        href: slides/slides.html
+      - text: "Labs"
+        menu:
+          - text: "Lab 1 - Quarto"
+            href: labs/lab-01-quarto.html
+          - text: "Lab 2 - Shiny"
+            href: labs/lab-02-shiny.html
+          - text: "Lab 3 - Shinylive"
+            href: labs/lab-03-shinylive.html
+          - text: "Lab 4 - Interactive report"
+            href: labs/lab-04-shinylive-quarto.html
+      - text: "App"
+        href: apps/penguins-app/index.html
+      - text: "Example report"
+        href: example-report/report.html
+  page-footer:
+    left: "Quarto + Shiny + Shinylive workshop"
+
+format:
+  html:
+    theme: cosmo
+    embed-resources: true

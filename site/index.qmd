@@ -1,0 +1,119 @@
+---
+title: "Serverless Interactive Reporting"
+subtitle: "Quarto and Shinylive: interactive reports and apps without a server"
+---
+
+A 2-hour, hands-on workshop introducing **Quarto** and **Shinylive** for serverless interactive
+reporting. All content is in English. Start with the [slides](slides/slides.html), then follow
+the labs in order.
+
+## The one idea
+
+Shinylive output is **static**: the host serves files, and the reader's browser runs the R via
+webR/WebAssembly. No server, no data transit, no hosting cost. The corollary: your code is
+public, your packages must have WASM builds, and your data must stay modest.
+
+## Content
+
+| | |
+|---|---|
+| [Slides](slides/slides.html) | The RevealJS slide deck (the "lecture") |
+| [Lab 1 - Quarto](labs/lab-01-quarto.html) | Quarto from R Markdown (similarities and differences) |
+| [Lab 2 - Shiny](labs/lab-02-shiny.html) | Build a Shiny app from scratch (reactive core) |
+| [Lab 3 - Shinylive](labs/lab-03-shinylive.html) | Export a Shiny app to Shinylive with `shinylive::export()` |
+| [Lab 4 - Interactive report](labs/lab-04-shinylive-quarto.html) | Embed Shiny in a Quarto report, deploy statically |
+| [Standalone app](apps/penguins-app/index.html) | The reference Shiny app, exported to run in the browser |
+| [Example report](example-report/report.html) | A working interactive Quarto report (static prose + live widgets) |
+
+## Prerequisites
+
+A recent **R** (4.x), **Quarto CLI** (this material targets v1.10+), and an IDE (RStudio or
+Positron) are enough for the first half. Install these R packages (e.g. with
+`install.packages(c("shiny", "dplyr", "ggplot2", "readr", "shinylive", "httpuv", "gt"))`):
+
+| Package | Purpose | WASM-safe? |
+|---|---|---|
+| `shiny` | UI + reactive server (the app framework) | yes |
+| `dplyr` | data wrangling in the penguins app and labs | yes |
+| `ggplot2` | plotting app and report figures | yes |
+| `readr` | read the bundled `penguins.csv` | yes |
+| `gt` | tables in the slide deck (optional, deck build only) | no |
+| `shinylive` | export apps/reports to run in the browser | no (build-time) |
+| `httpuv` | serve an exported site locally (`runStaticServer`) | no |
+| `renv` | pin package versions for reproducible exports (Lab 3 stretch) | no |
+
+WASM-safe packages are the ones that also run **inside** a `{shinylive-r}` block in the reader's
+browser; the others are used on the host only. `palmerpenguins` is used in the example report's
+live widget (also WASM-safe). `install.packages()` works for all of the above; Quarto extensions
+(`quarto-ext/shinylive`) are installed per-project with `quarto add`.
+
+## Suggested flow (2 hours)
+
+1. **Slides, Part 1 (Quarto, ~25 min)** then **Lab 1 (~10 min)**.
+2. **Slides, Part 2 (Shiny, ~25 min)** then **Lab 2 (~15 min)**.
+3. **Slides, Part 3 (Shinylive, ~20 min, incl. WASM/webR/assets)**; **Lab 3 (~10 min)**.
+4. **Slides, deployment and Quarto report (~15 min)**; **Lab 4 (~10 min)**.
+5. **Wrap-up: trade-offs, GitHub Actions, take-home (~5 min)**.
+
+Finished examples exist (apps + example-report) so anyone can jump in at any point.
+
+## Deploying on your own
+
+Everything hinges on one distinction:
+
+| | Static host | Non-static (server) host |
+|---|---|---|
+| What it does | Serves **files** (HTML, JS, CSS, WASM) | Runs a **program** that computes for each request |
+| Example | GitHub Pages, Netlify, Quarto Pub, any web server | shinyapps.io, Posit Connect, your own R server |
+| Cost | Usually free | Server + maintenance |
+| Can run Shiny? | Yes, **in the browser** via webR | Yes, traditionally server-side |
+| Packages | Only WASM builds | Anything installable on the server |
+| Secrets | Impossible (code is public) | Kept server-side |
+
+A Shinylive app or report is **static**: the host hands the reader a pile of files and does
+nothing else. The reader's browser executes the R. This is why the same output works on free
+static hosts.
+
+### Quick publish (no workflow needed)
+
+From a Quarto project or document folder, the native commands:
+
+```bash
+quarto publish gh-pages      # push rendered output to GitHub Pages
+quarto publish netlify       # deploy a folder to Netlify
+quarto publish quarto-pub    # free, public, Posit-hosted service
+```
+
+These are ideal for one-off or interactive publishing. For durable, repeatable deployments,
+prefer a GitHub Actions workflow.
+
+### Automating with GitHub Actions
+
+The reference workflow is the reusable `deploy-app.yaml` from `posit-dev/r-shinylive`
+([view the source](https://github.com/posit-dev/r-shinylive/blob/actions-v1/.github/workflows/deploy-app.yaml)).
+It checks out the repo, installs R and the app's packages (via `renv`), runs
+`shinylive::export(".", "site")`, uploads `site/` as a Pages artifact, and deploys it on push.
+
+For a standalone **app** repo, add `.github/workflows/deploy-app.yaml` based on that workflow. For
+a Quarto **report** repo, the pattern is the same but you `quarto render` the report instead of
+exporting an app, then deploy the output folder to Pages (or simply run `quarto publish
+gh-pages`).
+
+**GitHub Pages setup (one time):** push the repo, then **Settings → Pages → Source: GitHub
+Actions**. The workflow needs `pages: write` and `id-token: write` permissions to deploy.
+
+### Don't forget the service worker
+
+Include the service worker as a project resource, or collaborators may see a blank page:
+
+```yaml
+format:
+  html:
+    resources:
+      - shinylive-sw.js
+```
+
+### Offline / private sharing
+
+Render locally, zip the output folder, and send it. The recipient unzips and double-clicks the
+HTML: the interactive content runs in their browser, entirely offline and on no server.

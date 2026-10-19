@@ -1,0 +1,143 @@
+---
+title: "Lab 2 · Shiny fundamentals"
+author: "Workshop participant"
+format: html
+editor: source
+---
+
+## Goal
+
+Build a small but complete Shiny app from scratch: UI + server, an input wired to an output,
+a reactive expression, and (stretch) an uploaded file. You will reconstruct, step by step,
+the `material/apps/penguins-app/app.R` used later for Shinylive.
+
+**Recommended setup:** create a folder `myapp/` and inside it a file `app.R` that you fill in
+at each step. Run it with the **Run App** button (RStudio / Positron), or `shiny::runApp("myapp")`.
+
+The bundled dataset is at `material/apps/penguins-app/penguins.csv`; copy it beside your `app.R`
+so the app can read it with `readr::read_csv("penguins.csv")`.
+
+---
+
+## 1. The skeleton (UI + server)
+
+Every Shiny app is two pieces. Start here and run it.
+
+```r
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("My first app")
+)
+
+server <- function(input, output, session) {}
+
+shinyApp(ui, server)
+```
+
+You should see an empty page with a title. Nothing reacts yet, because there is no input or output.
+
+## 2. Add an input and a text output
+
+Add a slider and a text output, and wire them in the server. To do that, replace the `ui` and `server` with the following:
+
+```r
+ui <- fluidPage(
+  titlePanel("My first app"),
+  sliderInput("bins", "Bins", 5, 40, 20),
+  textOutput("msg")
+)
+
+server <- function(input, output, session) {
+  output$msg <- renderText({
+    paste("You chose", input$bins, "bins")
+  })
+}
+```
+
+Drag the slider. The text updates. Notice: `input$bins` reads the slider, `output$msg` supplies the text, and `renderText()` wraps the R value.
+
+## 3. Turn it into a plot
+
+Instead of producing text with `renderText()` as `output$msg`, produce a histogram with `renderPlot()` as `output$hist` using the following code:
+
+```r
+penguins <- readr::read_csv("penguins.csv", show_col_types = FALSE)
+
+penguins |>
+  ggplot(aes(body_mass_g)) +
+  geom_histogram(
+    bins = input$bins, 
+    fill = "#2E7D6B", 
+    color = "white"
+  )
+```
+
+Do not forget to pre-load the {ggplot2} package.
+
+This effectively uses the bundled penguins dataset, and lets the slider control the number of bins. Then, update the UI to show the plot instead of the text using `plotOutput()`.
+
+## 4. Add a second decoration
+
+Add a `selectInput()` for the variable to plot to choose among `"body_mass_g"` or `"bill_length_mm"`, define it with id `variable` and use `input$variable` inside `aes(.data[[...]])` to use the selected variable, so the plot reacts to the choice. Run it.
+
+## 5. Stretch: update the list of variables
+
+Update the `selectInput()` choices to reflect the available variables in the dataset. This should happen in the server, where the dataset is read. Use `names(penguins)` to get the variable names, filter them to keep only numeric variables, and update the `selectInput()` choices with `updateSelectInput()`. Use `req(input$variable)` inside `renderPlot()` to ensure that a variable is selected before plotting.
+
+## 6. Use a reactive expression
+
+Reading the data inside `renderPlot()` re-reads the file every time. Move it into a `reactive()` so it is read once and reused:
+
+```r
+server <- function(input, output, session) {
+  penguins <- readr::read_csv("penguins.csv", show_col_types = FALSE)
+
+  df <- reactive(penguins)
+
+  output$hist <- renderPlot({
+    req(input$variable)
+    df() |>
+      ggplot(aes(.data[[input$variable]])) +
+      geom_histogram(bins = input$bins, fill = "#2E7D6B", color = "white")
+  })
+}
+```
+
+Try deleting the `reactive()` and reading inside `renderPlot()`: it still works, but is slower and
+less clean. `reactive()` centralises the "source of the data".
+
+## 7. Stretch: uploaded data
+
+Hook up an optional uploaded file that replaces the bundled data:
+
+````markdown
+```r
+fileInput("data", "Upload your own CSV (optional)", accept = ".csv")
+```
+````
+
+In the server:
+
+```r
+df <- reactive({
+  if (is.null(input$data)) {
+    penguins
+  } else {
+    readr::read_csv(input$data$datapath, show_col_types = FALSE)
+  }
+})
+```
+
+Your app now reads a file only once the user provides one. **Neither the uploaded file nor the
+bundled data ever leave the app**: this is the property that matters for Shinylive later.
+
+## 8. Compare with the reference
+
+Open `material/apps/penguins-app/app.R`. Yours should look very similar. Keep your version, as it
+does not need to match exactly. If you are stuck, copy the reference and read through it.
+
+## 9. Conclusion
+
+**You are done with Lab 2.** Move to `lab-03-shinylive.qmd`. You will export this very app to a
+static site, so it helps if the app currently runs.

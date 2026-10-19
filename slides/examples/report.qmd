@@ -1,0 +1,17 @@
+---
+bibliography: references.bib
+---
+
+See @fig-mpg, @fig-rank and @wickham2016.
+
+```{r}
+#| label: fig-mpg
+#| fig-cap: "Distribution of mpg"
+hist(mtcars$mpg)
+```
+
+```{r}
+#| label: fig-rank
+#| fig-cap: "Ranks of mpg values"
+plot(rank(mtcars$mpg))
+```

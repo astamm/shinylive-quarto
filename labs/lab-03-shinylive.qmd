@@ -1,0 +1,89 @@
+---
+title: "Lab 3 · From a Shiny app to Shinylive"
+author: "Workshop participant"
+format: html
+editor: source
+---
+
+## Goal
+
+Take your standalone Shiny app (Lab 2) and **export** it with the `shinylive` R package so it
+runs in the browser, then serve it locally with a plain static server. No R process is needed to
+execute the app once exported; the reader's browser does the work via webR.
+
+If you did not finish Lab 2, use the ready-made app at `material/apps/penguins-app/`.
+
+---
+
+## 1. One-time setup
+
+Make sure the `shinylive` R package is installed (it is on the workshop image; otherwise install it):
+
+```r
+install.packages("shinylive")
+```
+
+## 2. Export your app
+
+Run R (console in your IDE) from the workshop root, and export your app folder to a `site` folder:
+
+```r
+shinylive::export("material/apps/penguins-app", "site")
+```
+
+The two arguments are the **source app folder** and the **destination folder**. `shinylive`
+walks the app, decides which R packages it needs, downloads the Shinylive web assets (including
+webR / WASM builds of those packages), and writes a fully static site into `site`.
+
+## 3. Serve it locally
+
+A static server just hands out files:
+
+```r
+httpuv::runStaticServer("site")
+```
+
+Open the printed URL (for example http://127.0.0.1:8008) in a browser. Your Shiny app should
+appear and be fully interactive, with **no R server running the app**.
+
+::: {.callout-note}
+The first load is slow (seconds): the browser downloads webR and the packages. Reload after the
+first load to feel the difference made by the browser cache.
+:::
+
+## 4. Inspect the exported site
+
+Open the `site/` folder. You should see the app files plus a large `shinylive/` subfolder with
+JavaScript, worker scripts, and `.wasm` binaries. This is the "web assets library" in action: the
+host only stores files; the browser runs them.
+
+Use your IDE's file explorer and, if curious, open `site/index.html` to see the bootstrapped page.
+
+## 5. Confirm data stays local (the privacy property)
+
+In the running app, upload the bundled `penguins.csv` (or any other CSV). Open your browser's
+**Network** tab (DevTools) and reload. You will see requests for static assets only; the uploaded
+file is read into browser memory and never POSTed anywhere.
+
+::: {.callout-warning}
+The flip side: open the app's downloaded source in DevTools (Sources tab). Your **code is public**
+to anyone with the URL. Never put API keys or passwords in a Shinylive app.
+:::
+
+## 6. Stretch: pin dependencies with renv
+
+Reproducible exports pin package versions with renv. The lifecycle is three commands:
+
+```r
+renv::init(project = "material/apps/penguins-app")     # once: discovers deps, writes a renv.lock
+renv::snapshot(project = "material/apps/penguins-app") # capture dependency updates into the lockfile
+shinylive::export("material/apps/penguins-app", "site")
+```
+
+`shinylive::export()` reads the lockfile and bundles **exactly those versions** as WASM builds.
+(`renv::restore()` is the reverse: it installs the exact versions a lockfile pins.)
+
+---
+
+**You are done with Lab 3.** You now have a serverless Shiny app ready for any static host.
+Next, `lab-04-shinylive-quarto.qmd` embeds Shiny directly in a Quarto report.

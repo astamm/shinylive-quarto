@@ -1,0 +1,10 @@
+---
+title: "My first Quarto doc"
+format: html
+---
+
+```{r}
+#| label: fig-mpg
+#| fig-cap: "Distribution of mpg"
+hist(mtcars$mpg)
+```

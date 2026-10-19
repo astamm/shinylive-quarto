@@ -1,0 +1,447 @@
+/*-- scss:defaults --*/
+/* =====================================================================
+   styles_workshop.scss — deck-local theme for the "Serverless interactive
+   reports with Quarto and Shinylive" workshop.
+
+   Pairs with styles_template.scss (dark canvas theme). This file supplies
+   the concrete brand palette and the deck-only classes. Listed after the
+   template in the format's `theme:` list so its --scss:defaults override
+   the template's defaults.
+
+       theme: [default, styles_template.scss, styles_workshop.scss]
+   ===================================================================== */
+
+/* Brand palette: teal (technology / Quarto), amber (interaction / Shiny),
+   indigo (serverless / Shinylive). */
+$base:     #2E7D6B;   // primary accent  (Quarto / documents)
+$accent:   #E8A33D;   // secondary accent (Shiny / interaction)
+$tertiary: #4A5899;   // tertiary accent  (Shinylive / serverless)
+$ink-light: #F1EEE6;  // light text on the dark canvas
+$ink-dark:  #17251F;  // dark canvas / surfaces
+
+/* Feed the template's brand accents from this palette. Rules compiled after
+   these defaults pick up the concrete colors automatically. */
+$brand-1: $base;
+$brand-2: $accent;
+$brand-3: $tertiary;
+
+/* The concrete ink values used by #title-slide layout rules below. */
+$draft:   $base;
+$review:  $accent;
+$release: $tertiary;
+
+/*-- scss:rules --*/
+
+/* Global base font size. The deck's default root (40px) is too large and
+   makes most content slides overflow the 1280x700 canvas. 34px keeps text
+   readable while letting the large majority of slides fit. Individual
+   dense/content slides that still spill are reworded in slides.qmd.
+   (Font-size of most text is em-based off this root, so this scales the
+   whole deck; fixed-px masthead slides are unaffected.) */
+:root {
+  --r-main-font-size: 34px;
+}
+
+/* Inline accent classes for colour-coded labels. The three hues mirror the
+   brand palette (teal/Quarto, amber/Shiny, indigo/Shinylive) and replace the
+   earlier two-colour .blue/.yellow scheme so every pillar has its own hue.
+   .hl-wrap is a neutral fourth accent used where a block deliberately falls
+   outside the three pillars (the wrap-up / decision block, or a 4th item on a
+   spread). Lightened ink keeps it legible on the dark canvas yet clearly not a
+   pillar hue. */
+.hl-draft   { color: lighten($base, 20%); font-weight: bold; }
+.hl-review  { color: $accent;               font-weight: bold; }
+.hl-release { color: lighten($tertiary, 20%); font-weight: bold; }
+.hl-wrap    { color: lighten($ink-dark, 55%); font-weight: bold; }
+
+/* ---------------------------------------------------------------- */
+/* Title slide: centered masthead over a soft gradient.             */
+/* ---------------------------------------------------------------- */
+.reveal #title-slide {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 0 4em !important;
+}
+.reveal #title-slide::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0; top: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 38%,
+    rgba($ink-dark, 0.35) 0%,
+    rgba($ink-dark, 0.85) 90%
+  );
+}
+.reveal #title-slide #title-block-header,
+.reveal #title-slide .quarto-title-authors,
+.reveal #title-slide .date,
+.reveal #title-slide .quarto-title-affiliation {
+  position: relative;
+  z-index: 1;
+}
+.reveal #title-slide .title,
+.reveal .title-slide h1 {
+  color: $ink-light;
+  font-size: 66px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.4em;
+  text-transform: none;
+}
+.reveal #title-slide .quarto-title-author-name {
+  color: lighten($base, 22%);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.reveal #title-slide .date {
+  color: rgba($ink-light, 0.72);
+  font-size: 19px;
+  letter-spacing: 0.04em;
+  margin-top: 1.4em;
+}
+/* The French translation sits as a smaller, dimmer italic line under the
+   English subtitle so it reads as a subtitle, not a second headline. */
+.reveal #title-slide .subtitle em {
+  display: block;
+  font-size: 0.7em;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  color: rgba($ink-light, 0.78);
+  margin-top: 0.7em;
+}
+
+/* ---------------------------------------------------------------- */
+/* Slide canvas: pin every slide to the top of the 1280x700 box and  */
+/* clear the left banner + footer via padding. This deck uses plain  */
+/* content slides (##), so these rules are what actually lay content */
+/* out; without them slides drift and content overflows right/bottom.*/
+/* ---------------------------------------------------------------- */
+.reveal .slides section {
+  box-sizing: border-box;
+  padding: 0 !important;
+  color: $ink-light;
+}
+
+/* With center:false reveal leaves top:auto on absolute sections; pin
+   them so each fills the visible 700px canvas. */
+.reveal .slides > section:not(.stack):not(.center):not(.paper) {
+  top: 0 !important;
+}
+.reveal .slides > section.stack { top: 0 !important; }
+.reveal .slides > section.stack > section:not(.center):not(.paper) {
+  top: 0 !important;
+}
+/* Sub-slides are shifted +96px right by reveal; re-anchor to origin. */
+.reveal .slides > section.stack > section { left: 0 !important; }
+
+/* Dark/light/finale coordinate slides keep an explicit height. */
+.reveal .slides section.dark,
+.reveal .slides section.light,
+.reveal .slides section.finale {
+  height: 700px;
+}
+
+/* Plain content slides: padding clears the left banner, the slide
+   title and the footer so nothing is cut off. */
+.reveal .slides section:not(.dark):not(.light):not(.finale):not(.paper) {
+  padding: 88px 80px 64px 96px !important;
+}
+
+/* Slide titles are absolutely placed in the same coordinate space. */
+.reveal h2 {
+  position: absolute;
+  left: 96px;
+  top: 54px;
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: .18em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Keep the menu button clear of the footer bar. */
+.reveal .slide-menu-button {
+  left: 2.5em !important;
+}
+
+/* Slide number: bottom-right, clear of the left lateral banner and the
+   bottom-center footer title. Kept subtle so it does not compete with them. */
+.reveal .slide-number {
+  bottom: 18px;
+  right: 24px;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: rgba($ink-light, 0.55);
+  background: none;
+}
+
+/* ---------------------------------------------------------------- */
+/* Lateral banner: vertical ink-dark strip echoing the footer rim.   */
+/* The run title is set here; override per workshop.                 */
+/* ---------------------------------------------------------------- */
+.reveal::before {
+  content: "Réseau Interdisciplinaire autour de la Statistique (RIS)";
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+  z-index: 2;
+  width: 2em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding-bottom: 1.5em;
+  background-color: $ink-dark;
+  color: $ink-light;
+  font-size: 15px;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 0;
+  border-right: 4px solid transparent;
+  border-image: linear-gradient(
+      $base 0%, $base 33.4%,
+      $accent 33.4%, $accent 66.7%,
+      $tertiary 66.7%, $tertiary 100%
+    ) 1;
+}
+
+/* Code on the deck stays light and readable over the dark canvas. */
+.reveal code {
+  color: lighten($tertiary, 30%);
+}
+
+/* Uniform code font across the deck, shared with the codewindow plugin
+   (which sizes its own code at 0.45em of the 34px body root). Using the same
+   factor for plain ``` fenced blocks keeps every code block at one compact,
+   readable size so code-heavy slides fit the 700px canvas. */
+.reveal section pre,
+.reveal section pre code {
+  font-size: 0.45em;
+  line-height: 1.4;
+}
+
+/* Callouts: keep the tinted box and accent border as emphasis, but drop the
+   default "Note" title banner - every callout here uses the default label,
+   so the header adds no information and only costs vertical space. The long
+   selector matches Quarto's specificity so display:none wins over its flex,
+   and the body's reserved top spacing is removed so the box collapses to the
+   height of its text. */
+.reveal div.callout.callout-style-default.callout-note div.callout-title { display: none; }
+.reveal div.callout.callout-style-default.callout-note div.callout-body { margin-top: 0 !important; padding-top: 0 !important; }
+.reveal div.callout.callout-style-default.callout-note .callout-content { padding-top: 0 !important; }
+
+/* Hands-on, "do this now" band used at the end of each section. */
+.hands-on {
+  background: rgba($accent, 0.16);
+  border: 1px solid rgba($accent, 0.55);
+  border-left-width: 6px;
+  border-left-color: $accent;
+  border-radius: 8px;
+  color: $ink-light;
+  padding: 0.6em 1em;
+}
+.hands-on strong { color: $accent; }
+
+/* Light hands-on slides: a pale canvas marks the moments the audience is
+   actively working, visually separating them from the lecture slides. Only
+   the standalone "hands-on" / "try now" / "take-home" slides get the flip
+   (each holds a single .hands-on band and nothing else), so the only
+   component that needs re-inking is the band itself; `.light h2` is already
+   dark from the finale rules below. The pale background comes from the
+   section's `background-color="#F1EEE6"` attribute (as on the finale light
+   slides), and the section gets the standard content-slide padding so the
+   band clears the lateral banner and the footer. */
+.reveal .slides section.light:has(.hands-on) {
+  color: $ink-dark;
+  padding: 96px 80px 40px 96px !important;
+}
+.reveal .slides section.light:has(.hands-on) .hands-on {
+  color: $ink-dark;
+  background: rgba($accent, 0.22);
+  border: 1px solid rgba($accent, 0.7);
+  border-left-width: 6px;
+  border-left-color: $accent;
+}
+.reveal .slides section.light:has(.hands-on) .hands-on strong {
+  color: darken($accent, 28%);
+}
+
+/* Spread layout: distributes blocks down the full slide height
+   (space-between / space-evenly), clearing the footer via bottom padding. */
+.spread {
+  --spread-padding: 0.5em;
+  padding-top: var(--spread-padding);
+  padding-bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.spread-evenly { justify-content: space-evenly; }
+
+/* When a .spread is paired with a following note (any callout or .highlight-last),
+   make the section a flex column so both fit the 700px canvas instead of the
+   spread pushing the note below the fold. */
+.reveal .slides section:has(.spread):has(.callout),
+.reveal .slides section:has(.spread):has(.highlight-last) {
+  display: flex;
+  flex-direction: column;
+}
+.reveal .slides section:has(.spread):has(.callout) > .spread,
+.reveal .slides section:has(.spread):has(.highlight-last) > .spread {
+  flex: 0 1 auto;
+  max-height: 56%;
+}
+
+/* Two-by-two grid of compact notes for the housekeeping slide. Four short
+   practical items would feel cramped as a single tall spread; the grid gives
+   each one its own cell and breathing room below the intro line. */
+.house-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 30px 48px;
+  width: 100%;
+  margin-top: 20px;
+}
+.house {
+  border-left: 5px solid rgba($ink-light, 0.35);
+  padding: 4px 0 4px 24px;
+  font-size: 28px;
+  line-height: 1.5;
+}
+.house strong { font-weight: 700; }
+
+/* Compact footnote bar for reference links that would crowd bullets. */
+.small-note {
+  margin-top: 18px;
+  font-size: 15px;
+  color: rgba($ink-light, 0.6);
+}
+.small-note a { color: lighten($brand-1, 15%); }
+/* Roadmap section-transition series.                               */
+/* The four agenda blocks (Quarto, Shiny, Shinylive, Wrap-up) drawn  */
+/* as a shared card row whose same data-ids let reveal's auto-animate*/
+/* glide them from the overview onto each section divider. On a given*/
+/* divider the block being introduced is 'active' (full pillar card),*/
+/* earlier blocks are greyed over as 'done' (past, with a check), and*/
+/* later ones stay as dim 'todo' chips.                              */
+/* ---------------------------------------------------------------- */
+
+/* Card row laid out in the 1280x700 coordinate space, per-slide     */
+/* inline positions (backgrounds come from the shared [data-id]).    */
+.roadmap .card { padding: 22px 24px; }
+
+/* Compact chip state: drop the body text, centre the title. Used for
+   the 'done' and 'todo' neighbours so only the active block carries  */
+/* detail.                                                           */
+.roadmap .card.chip {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.roadmap .card.chip .p { display: none; }
+
+/* Past blocks recede into grey; the check mark signals "covered".   */
+.roadmap .card.done {
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+.roadmap .card.done .h::after { content: "  \2713"; }
+
+/* Upcoming blocks are kept dimmer still.                            */
+.roadmap .card.todo {
+  opacity: 0.2;
+  filter: grayscale(1);
+}
+
+/* Footnote band under the card row: per-block focus and timing. On a */
+/* light slide the ink flips to dark, on a dark divider it stays pale.*/
+.roadmap-foot {
+  position: absolute;
+  left: 96px;
+  top: 560px;
+  width: 1104px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.roadmap-foot span { color: rgba($ink-light, 0.6); }
+.reveal .slides section.light .roadmap-foot span { color: rgba($ink-dark, 0.55); }
+.roadmap-foot b { color: $ink-light; font-weight: 600; }
+.reveal .slides section.light .roadmap-foot b { color: $ink-dark; }
+
+/* Section-divider roadmaps: the # Section H1 slides carry the same roadmap
+   card row as the ## Roadmap overview. The H1 is just a section marker, so
+   hide it and neutralise reveal's centered title-slide so the absolutely
+   placed .big-title + cards own the canvas. */
+.reveal .slides section.light:has(.roadmap) > h1,
+.reveal .slides section.light:has(.roadmap) > h2 { display: none; }
+.reveal .slides section.light:has(.roadmap) {
+  display: block;
+  align-items: initial;
+  justify-content: initial;
+  text-align: left;
+}
+
+/* ---------------------------------------------------------------- */
+/* Serverless finale (auto-animate sequence).                        */
+/* A 4-phase animated closer drawn in the 1280x700 coordinate space: */
+/*   dark intro -> light cards -> light Shinylive focus -> dark      */
+/*   finale. Shared `data-id`s let reveal's auto-animate glide the   */
+/*   `.panel`s from slide to slide; the third phase enlarges the     */
+/*   Shinylive card and shrinks its neighbours to `.marker` tabs.    */
+/* ---------------------------------------------------------------- */
+
+/* Coordinate-space panels, absolutely placed per-slide inline. */
+.panel {
+  position: absolute;
+  border-radius: 18px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Pillar backgrounds: Quarto (teal), Shiny (amber), Shinylive (indigo),
+   and a neutral charcoal for the closing Wrap-up block. */
+[data-id="quarto"]   { background: $draft; }
+[data-id="shiny"]    { background: $review; }
+[data-id="shinylive"] { background: $release; }
+[data-id="wrapup"]   { background: $ink-dark; }
+
+/* On light finale slides the heading text flips to the dark ink; the
+   panels/cards carry their own coloured background, so their light text
+   stays legible on either canvas. */
+.dark  h2, .dark  .big-title { color: $ink-light; }
+.light h2, .light .big-title { color: $ink-dark; }
+
+/* Large centred masthead used on each finale phase. */
+.big-title {
+  position: absolute;
+  font-weight: 700;
+  line-height: 1.04;
+}
+
+/* The three pillar cards. .card sits on its pillar-coloured panel; .h/.p
+   typograph the title and body inside it. */
+.card { padding: 26px 28px; color: $ink-light; }
+.card .h { font-size: 32px; font-weight: 700; }
+.card .p { font-size: 19px; line-height: 1.45; margin-top: 12px; opacity: .92; }
+
+/* Code inside a pillar card stays light: the deck-wide code rule tints code
+   indigo for the dark canvas, which is invisible on the indigo card. A light
+   ink keeps inline code readable on all three pillar backgrounds and distinct
+   enough from the card body via its monospace/backtick styling. */
+.reveal .card code { color: $ink-light; }
+
+/* Small square reminder tab for a pillar that is not in focus. */
+.marker { width: 40px; height: 40px; border-radius: 10px; }

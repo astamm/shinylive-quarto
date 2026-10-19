@@ -1,0 +1,8 @@
+---
+format: html
+---
+
+```{r}
+#| echo: false
+hist(mtcars$mpg)
+```
