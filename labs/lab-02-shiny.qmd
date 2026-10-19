@@ -9,12 +9,12 @@ editor: source
 
 Build a small but complete Shiny app from scratch: UI + server, an input wired to an output,
 a reactive expression, and (stretch) an uploaded file. You will reconstruct, step by step,
-the `material/apps/penguins-app/app.R` used later for Shinylive.
+the `apps/penguins-app/app.R` used later for Shinylive.
 
 **Recommended setup:** create a folder `myapp/` and inside it a file `app.R` that you fill in
 at each step. Run it with the **Run App** button (RStudio / Positron), or `shiny::runApp("myapp")`.
 
-The bundled dataset is at `material/apps/penguins-app/penguins.csv`; copy it beside your `app.R`
+The bundled dataset is at `apps/penguins-app/penguins.csv`; copy it beside your `app.R`
 so the app can read it with `readr::read_csv("penguins.csv")`.
 
 ---
@@ -134,7 +134,7 @@ bundled data ever leave the app**: this is the property that matters for Shinyli
 
 ## 8. Compare with the reference
 
-Open `material/apps/penguins-app/app.R`. Yours should look very similar. Keep your version, as it
+Open `apps/penguins-app/app.R`. Yours should look very similar. Keep your version, as it
 does not need to match exactly. If you are stuck, copy the reference and read through it.
 
 ## 9. Conclusion

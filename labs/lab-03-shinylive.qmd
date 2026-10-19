@@ -11,7 +11,7 @@ Take your standalone Shiny app (Lab 2) and **export** it with the `shinylive` R 
 runs in the browser, then serve it locally with a plain static server. No R process is needed to
 execute the app once exported; the reader's browser does the work via webR.
 
-If you did not finish Lab 2, use the ready-made app at `material/apps/penguins-app/`.
+If you did not finish Lab 2, use the ready-made app at `apps/penguins-app/`.
 
 ---
 
@@ -28,7 +28,7 @@ install.packages("shinylive")
 Run R (console in your IDE) from the workshop root, and export your app folder to a `site` folder:
 
 ```r
-shinylive::export("material/apps/penguins-app", "site")
+shinylive::export("apps/penguins-app", "site")
 ```
 
 The two arguments are the **source app folder** and the **destination folder**. `shinylive`
@@ -75,9 +75,9 @@ to anyone with the URL. Never put API keys or passwords in a Shinylive app.
 Reproducible exports pin package versions with renv. The lifecycle is three commands:
 
 ```r
-renv::init(project = "material/apps/penguins-app")     # once: discovers deps, writes a renv.lock
-renv::snapshot(project = "material/apps/penguins-app") # capture dependency updates into the lockfile
-shinylive::export("material/apps/penguins-app", "site")
+renv::init(project = "apps/penguins-app")     # once: discovers deps, writes a renv.lock
+renv::snapshot(project = "apps/penguins-app") # capture dependency updates into the lockfile
+shinylive::export("apps/penguins-app", "site")
 ```
 
 `shinylive::export()` reads the lockfile and bundles **exactly those versions** as WASM builds.

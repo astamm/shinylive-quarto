@@ -8,7 +8,7 @@ It uses only WASM-safe packages (`shiny`, `dplyr`, `ggplot2`, `readr`), so it ex
 with Shinylive.
 
 It is the "standalone app" half of the Shinylive story (deck slide 5.4, tab 1). The report half
-lives in `material/example-report/` and is published with `quarto publish gh-pages` instead.
+lives in `example-report/` and is published with `quarto publish gh-pages` instead.
 
 ## Run it as a normal app
 
@@ -25,7 +25,7 @@ Export the app folder to a `site/` directory, then serve it with a plain static 
 first export downloads the Shinylive webR assets (can take a minute):
 
 ```r
-shinylive::export("material/apps/penguins-app", "site")
+shinylive::export("apps/penguins-app", "site")
 httpuv::runStaticServer("site")
 ```
 

@@ -14,7 +14,7 @@ This example report shows the "report" half of Shinylive: **static** prose and f
 **live** Shiny widgets that run entirely in the browser via webR. It hosts on any static web
 service because the rendered output is plain files.
 
-Also see the standalone-app half, in `material/apps/penguins-app/`, which is exported with
+Also see the standalone-app half, in `apps/penguins-app/`, which is exported with
 `shinylive::export()`.
 
 ## A static section

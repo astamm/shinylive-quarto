@@ -28,7 +28,7 @@ package (already installed in Lab 3) for the R variant.
 
 ## 2. Create an interactive report
 
-Create a new file `report.qmd` in `material/labs/` (or your own folder). Start with this header:
+Create a new file `report.qmd` in `labs/` (or your own folder). Start with this header:
 
 ````markdown
 ---

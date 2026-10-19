@@ -31,13 +31,13 @@ jobs:
 
       - name: Render site
         run: |
-          cd material/site
+          cd site
           chmod +x build-site.sh
           quarto render
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: material/site/_site
+          path: site/_site
 
   deploy:
     needs: build

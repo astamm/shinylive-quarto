@@ -136,7 +136,7 @@ Everything today runs **locally**: a browser and your IDE, with no server to set
 
 <div class="house">[**No remote service until the end.**]{.hl-release} We only deploy a static page in the very last step.</div>
 
-<div class="house">[**Falling behind?**]{.hl-review} The finished examples live in `material/apps/penguins-app/`. Copy the answer and keep going.</div>
+<div class="house">[**Falling behind?**]{.hl-review} The finished examples live in `apps/penguins-app/`. Copy the answer and keep going.</div>
 
 <div class="house">[**Ask any time.**]{.hl-wrap} The Shiny section is paced deliberately slower, so questions are welcome throughout.</div>
 :::
@@ -373,7 +373,7 @@ gt_dark(data.frame(
 ```
 
 ::: {.hands-on}
-**Quick check.** Open `material/examples/` and render the `hello.qmd` example to HTML. Confirm the output file appears next to the source.
+**Quick check.** Open `examples/` and render the `hello.qmd` example to HTML. Confirm the output file appears next to the source.
 :::
 
 ## From R Markdown to Quarto in practice
@@ -428,7 +428,7 @@ For this workshop, Quarto matters for **three** reasons that build toward the fi
 ## Hands-on bandwidth {.light background-color="#F1EEE6"}
 
 ::: {.hands-on}
-**Now open `material/labs/lab-01-quarto.qmd`** and work through it. It covers:
+**Now open `labs/lab-01-quarto.qmd`** and work through it. It covers:
 
 1. Writing your first `.qmd` and choosing an output format.
 2. Structure, headings, lists, code chunks and inline code.
@@ -608,7 +608,7 @@ shinyApp(ui, server)
 ```
 :::
 
-`reactive({})` reads the file once, then re-runs only when the upload changes. Run it at `material/apps/penguins-app/app.R`.
+`reactive({})` reads the file once, then re-runs only when the upload changes. Run it at `apps/penguins-app/app.R`.
 
 ## Reactive details that trip people up
 
@@ -662,7 +662,7 @@ App code goes in **`{shinylive-r}` chunks**. We write our first one in the next 
 ## Hands-on bandwidth {.light background-color="#F1EEE6"}
 
 ::: {.hands-on}
-**Work through `material/labs/lab-02-shiny.qmd`.** It builds your first Shiny app step by step:
+**Work through `labs/lab-02-shiny.qmd`.** It builds your first Shiny app step by step:
 
 1. The two-piece skeleton (UI + server), run it with **Run App**.
 2. Add an input and a text output, then turn it into a histogram.
@@ -887,7 +887,7 @@ Take the penguins app from the Shiny block. Exporting it is two lines:
 ::: {.codewindow .r width="70%"}
 export.R
 ```r
-shinylive::export("material/apps/penguins-app", "site")
+shinylive::export("apps/penguins-app", "site")
 httpuv::runStaticServer("site")
 ```
 :::
@@ -916,9 +916,9 @@ builds. Fragile: a future package update can silently break a deployed app.
 ## Try it now {.light background-color="#F1EEE6"}
 
 ::: {.hands-on}
-**In `material/labs/lab-03-shinylive.qmd`:**
+**In `labs/lab-03-shinylive.qmd`:**
 
-1. Run `shinylive::export("material/apps/penguins-app", "site")`.
+1. Run `shinylive::export("apps/penguins-app", "site")`.
 2. Serve locally with `httpuv::runStaticServer("site")` and open the URL. Confirm app runs in your browser, with **no R server involved**.
 3. Inspect exported `site/` folder: notice the payload files (WASM, JS).
 4. Optional: upload your own CSV and confirm **no network request** carries it (check the Network tab: the file never leaves).
@@ -1048,7 +1048,7 @@ format:
 ## Try it now {.light background-color="#F1EEE6"}
 
 ::: {.hands-on}
-**In `material/labs/lab-04-shinylive-quarto.qmd`:**
+**In `labs/lab-04-shinylive-quarto.qmd`:**
 
 1. Create `report.qmd` with the extension enabled and one `{shinylive-r}` block (the histogram above).
 2. `quarto render` → open the HTML. Confirm the widget runs **in the browser**.

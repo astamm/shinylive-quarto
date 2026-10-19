@@ -7,12 +7,12 @@
 # via the `resources` entry in _quarto.yml.
 #
 set -euo pipefail
-cd "$(dirname "$0")"        # -> material/site
-ROOT="$(cd .. && pwd)"      # -> material
+cd "$(dirname "$0")"        # -> site
+ROOT="$(cd .. && pwd)"      # -> repo root
 rm -rf build
 mkdir -p build
 
-echo "[site] deck (material/slides, project render -> fires pre-render)"
+echo "[site] deck (slides, project render -> fires pre-render)"
 ( cd "$ROOT/slides" && quarto render )
 mkdir -p build/slides
 cp -R "$ROOT/slides"/slides.html "$ROOT/slides"/slides_files \
