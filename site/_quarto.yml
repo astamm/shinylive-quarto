@@ -7,10 +7,10 @@ project:
   resources:
     # build-site.sh renders each artifact into a site-local staging folder;
     # Quarto copies each into the _site root, so the deployed site's nav links
-    # (slides/slides.html, labs/..., apps/..., example-report/...) resolve.
+    # (slides/slides.html, labs/..., example-app/..., example-report/...) resolve.
     - slides/**
     - labs/**
-    - apps/**
+    - example-app/**
     - example-report/**
     - material.zip
 
@@ -32,10 +32,12 @@ website:
             href: labs/lab-03-shinylive.html
           - text: "Lab 4 - Interactive report"
             href: labs/lab-04-shinylive-quarto.html
-      - text: "App"
-        href: apps/penguins-app/index.html
-      - text: "Example report"
-        href: example-report/report.html
+      - text: "Examples"
+        menu:
+          - text: "Standalone app"
+            href: example-app/index.html
+          - text: "Interactive report"
+            href: example-report/report.html
   page-footer:
     left: "Quarto + Shiny + Shinylive workshop"
 

@@ -9,7 +9,7 @@ set -euo pipefail
 cd "$(dirname "$0")"        # -> site
 ROOT="$(cd .. && pwd)"      # -> repo root
 
-rm -rf slides labs apps example-report build material.zip
+rm -rf slides labs example-app example-report build material.zip
 
 echo "[site] deck (slides project render -> fires pre-render)"
 ( cd "$ROOT/slides" && quarto render )
@@ -31,10 +31,10 @@ cp -R "$ROOT/example-report"/report.html "$ROOT/example-report"/report_files \
       "$ROOT/example-report"/shinylive-sw.js example-report/
 
 echo "[site] standalone app (shinylive::export)"
-mkdir -p apps
-Rscript -e 'shinylive::export("'"$ROOT"'/apps/penguins-app", "./apps/penguins-app")'
+mkdir -p example-app
+Rscript -e 'shinylive::export("'"$ROOT"'/example-app", "./example-app")'
 
 echo "[site] workshop material archive (clone-equivalent, committed tree, no site/)"
 ( cd "$ROOT" && git archive --prefix=shinylive-quarto/ --format=zip -o site/material.zip HEAD -- . ':(exclude)site' )
 
-echo "[site] done -> site/{slides,labs,apps,example-report,material.zip}/"
+echo "[site] done -> site/{slides,labs,example-app,example-report,material.zip}/"

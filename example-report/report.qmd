@@ -4,6 +4,7 @@ author: "Workshop example"
 format:
   html:
     toc: true
+    code-tools: true
     resources:
       - shinylive-sw.js
 filters:
@@ -14,7 +15,7 @@ This example report shows the "report" half of Shinylive: **static** prose and f
 **live** Shiny widgets that run entirely in the browser via webR. It hosts on any static web
 service because the rendered output is plain files.
 
-Also see the standalone-app half, in `apps/penguins-app/`, which is exported with
+Also see the standalone-app half, in `example-app/`, which is exported with
 `shinylive::export()`.
 
 ## A static section
@@ -41,7 +42,7 @@ reader's browser, with no R server involved.
 ```{shinylive-r}
 #| standalone: true
 #| markup: code
-#| viewerHeight: 460
+#| viewerHeight: 512
 
 library(shiny)
 
@@ -67,24 +68,9 @@ from the block, only what the block needs is shipped.
 ```{shinylive-r}
 #| standalone: true
 #| layout: vertical
-#| viewerHeight: 520
+#| viewerHeight: 900
 
-library(shiny)
-
-ui <- fluidPage(
-  selectInput("var", "Variable",
-              choices = c("bill_length_mm", "bill_depth_mm", "body_mass_g")),
-  plotOutput("hist")
-)
-
-server <- function(input, output, session) {
-  penguins <- palmerpenguins::penguins  # small, always available demo data
-  output$hist <- renderPlot({
-    hist(penguins[[input$var]], col = "#4A5899", main = input$var)
-  })
-}
-
-shinyApp(ui, server)
+{{< include ../example-app/app.R >}}
 ```
 
 ## Sharing

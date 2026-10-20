@@ -33,29 +33,31 @@ public, your packages must have WASM builds, and your data must stay modest.
 | [Lab 2 - Shiny](labs/lab-02-shiny.html) | Build a Shiny app from scratch (reactive core) |
 | [Lab 3 - Shinylive](labs/lab-03-shinylive.html) | Export a Shiny app to Shinylive with `shinylive::export()` |
 | [Lab 4 - Interactive report](labs/lab-04-shinylive-quarto.html) | Embed Shiny in a Quarto report, deploy statically |
-| [Standalone app](apps/penguins-app/index.html) | The reference Shiny app, exported to run in the browser |
+| [Standalone app](example-app/index.html) | The reference Shiny app, exported to run in the browser |
 | [Example report](example-report/report.html) | A working interactive Quarto report (static prose + live widgets) |
 
 ## Prerequisites
 
 A recent **R** (4.x), **Quarto CLI** (this material targets v1.10+), and an IDE (RStudio or
 Positron) are enough for the first half. Install these R packages (e.g. with
-`install.packages(c("shiny", "dplyr", "ggplot2", "readr", "shinylive", "httpuv", "gt"))`):
+`install.packages(c("shiny", "dplyr", "ggplot2", "readr", "shinylive", "httpuv", "gt", "palmerpenguins"))`):
 
-| Package | Purpose | WASM-safe? |
+| Package | Purpose | Where it runs |
 |---|---|---|
-| `shiny` | UI + reactive server (the app framework) | yes |
-| `dplyr` | data wrangling in the penguins app and labs | yes |
-| `ggplot2` | plotting app and report figures | yes |
-| `readr` | read the bundled `penguins.csv` | yes |
-| `gt` | tables in the slide deck (optional, deck build only) | no |
-| `shinylive` | export apps/reports to run in the browser | no (build-time) |
-| `httpuv` | serve an exported site locally (`runStaticServer`) | no |
-| `renv` | pin package versions for reproducible exports (Lab 3 stretch) | no |
+| `shiny` | UI + reactive server (the app framework) | in the reader's browser (webR) |
+| `dplyr` | data wrangling in the penguins app and labs | in the reader's browser (webR) |
+| `ggplot2` | plotting app and report figures | in the reader's browser (webR) |
+| `readr` | read an uploaded CSV in the app | in the reader's browser (webR) |
+| `palmerpenguins` | provides the penguins dataset used throughout | in the reader's browser (webR) |
+| `gt` | tables in the slide deck (optional, deck build only) | host / build only |
+| `shinylive` | export apps and reports to run in the browser | host / build only |
+| `httpuv` | serve an exported site locally (`runStaticServer`) | host / build only |
+| `renv` | pin package versions for reproducible exports (Lab 3 stretch) | host / build only |
 
-WASM-safe packages are the ones that also run **inside** a `{shinylive-r}` block in the reader's
-browser; the others are used on the host only. `palmerpenguins` is used in the example report's
-live widget (also WASM-safe). `install.packages()` works for all of the above; Quarto extensions
+The first five run **inside** a `{shinylive-r}` block in the reader's browser via webR; the last
+four are used on the host or at build time (the WASM builds still ship, but they are not what the
+workshop exercises). `palmerpenguins` is required (not optional): the reference app loads its
+dataset from it. `install.packages()` works for all of the above; Quarto extensions
 (`quarto-ext/shinylive`) are installed per-project with `quarto add`.
 
 ## Suggested flow (2 hours)

@@ -4,13 +4,14 @@
 # It works both as a normal Shiny app (Run App) and exported with
 # shinylive::export() to run in the browser.
 #
-# Data file penguins.csv is bundled next to this script.
+# The penguins dataset comes from the palmerpenguins package.
 
 library(shiny)
 library(ggplot2)
+library(palmerpenguins)
 
-# Read the bundled dataset once, at app build time.
-penguins <- readr::read_csv("penguins.csv", show_col_types = FALSE)
+# palmerpenguins bundles and loads the penguins dataset.
+penguins <- palmerpenguins::penguins
 
 format_variable_unit <- function(var_names, unit_mapping) {
   sapply(var_names, function(x) {

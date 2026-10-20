@@ -1,7 +1,9 @@
 ---
 title: "Lab 1 · Quarto from R Markdown"
 author: "Workshop participant"
-format: html
+format:
+  html:
+    code-tools: true
 editor: source
 ---
 

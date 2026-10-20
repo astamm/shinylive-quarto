@@ -1,11 +1,12 @@
 # Palmer penguins explorer
 
-A small, dependency-light Shiny app used throughout the workshop: `app.R` plus the bundled
-`penguins.csv`. It works both as a normal Shiny app (**Run App** in RStudio or Positron) and,
-after exporting, as a standalone static site that runs in the browser.
+A small, dependency-light Shiny app used throughout the workshop: a single `app.R` that loads
+the penguins dataset from the `palmerpenguins` package. It works both as a normal Shiny app
+(**Run App** in RStudio or Positron) and, after exporting, as a standalone static site that runs
+in the browser.
 
-It uses only WASM-safe packages (`shiny`, `dplyr`, `ggplot2`, `readr`), so it exports cleanly
-with Shinylive.
+It uses only WASM-safe packages (`shiny`, `dplyr`, `ggplot2`, `readr`, `palmerpenguins`), so it
+exports cleanly with Shinylive.
 
 It is the "standalone app" half of the Shinylive story (deck slide 5.4, tab 1). The report half
 lives in `example-report/` and is published with `quarto publish gh-pages` instead.
@@ -25,7 +26,7 @@ Export the app folder to a `site/` directory, then serve it with a plain static 
 first export downloads the Shinylive webR assets (can take a minute):
 
 ```r
-shinylive::export("apps/penguins-app", "site")
+shinylive::export("example-app", "site")
 httpuv::runStaticServer("site")
 ```
 
@@ -59,7 +60,7 @@ usethis::use_github()   # connects this folder to a repo on GitHub
 
 No usethis? Do it by hand: a classic token with `repo` scope in
 GitHub → Settings → Developer settings → Personal access tokens, then `git init`,
-`git add -A`, `git commit -m "penguins app"`, `git remote add origin <url>`,
+`git add -A`, `git commit -m "example app"`, `git remote add origin <url>`,
 `git push -u origin main`.
 
 ## Automate deployment with GitHub Actions
@@ -91,6 +92,6 @@ The deploy guide (including the one-off local publish commands `quarto publish g
 - The deck's slide 5.4 tab 1 is a simplified teaching illustration of this same workflow; the
   upstream `posit-dev/r-shinylive` `deploy-app.yaml` is the real artifact to copy.
 - To pin exact package versions, run `renv::snapshot()` in this folder before exporting;
-  `shinylive::export()` then ships those exact WASM builds (deck slide 4.10, Lab 3 stretch).
+  `shinylive::export()` then ships those exact WASM builds (Lab 3 stretch).
 - The uploaded file and the bundled data never leave the reader's browser, but the code is
   public to anyone with the URL. Never put API keys or passwords here.

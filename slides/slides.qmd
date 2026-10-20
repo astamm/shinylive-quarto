@@ -136,7 +136,7 @@ Everything today runs **locally**: a browser and your IDE, with no server to set
 
 <div class="house">[**No remote service until the end.**]{.hl-release} We only deploy a static page in the very last step.</div>
 
-<div class="house">[**Falling behind?**]{.hl-review} The finished examples live in `apps/penguins-app/`. Copy the answer and keep going.</div>
+<div class="house">[**Falling behind?**]{.hl-review} The finished examples live in `example-app/`. Copy the answer and keep going.</div>
 
 <div class="house">[**Ask any time.**]{.hl-wrap} The Shiny section is paced deliberately slower, so questions are welcome throughout.</div>
 :::
@@ -660,7 +660,7 @@ shinyApp(ui, server)
 ```
 :::
 
-`reactive({})` reads the file once, then re-runs only when the upload changes. Run it at `apps/penguins-app/app.R`.
+`reactive({})` reads the file once, then re-runs only when the upload changes. Run it at `example-app/app.R`.
 
 ## Reactive details that trip people up
 
@@ -939,7 +939,7 @@ Take the penguins app from the Shiny block. Exporting it is two lines:
 ::: {.codewindow .r width="70%"}
 export.R
 ```r
-shinylive::export("apps/penguins-app", "site")
+shinylive::export("example-app", "site")
 httpuv::runStaticServer("site")
 ```
 :::
@@ -951,26 +951,12 @@ httpuv::runStaticServer("site")
 
 The result is plain files: drop them on GitHub Pages, Netlify, or any static host.
 
-## Pinning versions for the browser
-
-`shinylive::export` figures out the **R packages** your app calls and bundles their WASM
-builds. For deployments that keep working, pin the versions:
-
-::: {.spread .spread-md .spread-evenly}
-[**With renv.**]{.hl-draft} `renv::init()` once writes a `renv.lock`; `renv::snapshot()` captures updates
-to it as you change packages. `shinylive::export` reads the lockfile and ships those exact WASM
-builds, the most reproducible path: the browser gets the same versions you tested.
-
-[**Without renv.**]{.hl-review} It scans your dependencies and uses the **latest** webR
-builds. Fragile: a future package update can silently break a deployed app.
-:::
-
 ## Try it now {.light background-color="#F1EEE6"}
 
 ::: {.hands-on}
 **In `labs/lab-03-shinylive.qmd`:**
 
-1. Run `shinylive::export("apps/penguins-app", "site")`.
+1. Run `shinylive::export("example-app", "site")`.
 2. Serve locally with `httpuv::runStaticServer("site")` and open the URL. Confirm app runs in your browser, with **no R server involved**.
 3. Inspect exported `site/` folder: notice the payload files (WASM, JS).
 4. Optional: upload your own CSV and confirm **no network request** carries it (check the Network tab: the file never leaves).

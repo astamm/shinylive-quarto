@@ -1,7 +1,9 @@
 ---
 title: "Lab 4 · An interactive Quarto report, hosted statically"
 author: "Workshop participant"
-format: html
+format:
+  html:
+    code-tools: true
 editor: source
 engine: knitr
 ---

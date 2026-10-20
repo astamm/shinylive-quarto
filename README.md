@@ -22,7 +22,7 @@ cost.
 | `labs/lab-03-shinylive.qmd` | Lab 3 · Export a Shiny app to Shinylive |
 | `labs/lab-04-shinylive-quarto.qmd` | Lab 4 · An interactive report, hosted statically |
 | `examples/` | Standalone example docs used by the deck's embedded iframes |
-| `apps/penguins-app/` | The reference Shiny app (`app.R` + `penguins.csv`) |
+| `example-app/` | The reference Shiny app (`app.R`, dataset from `palmerpenguins`) |
 | `example-report/` | A working interactive Quarto report (prose + live widgets) |
 
 ## Prerequisites
@@ -32,11 +32,11 @@ cost.
 - Install the R packages once:
 
 ```r
-install.packages(c("shiny", "dplyr", "ggplot2", "readr", "shinylive", "httpuv", "gt"))
+install.packages(c("shiny", "dplyr", "ggplot2", "readr", "shinylive", "httpuv", "gt", "palmerpenguins"))
 ```
 
-`palmerpenguins` is used only in the example report's live widget; install it too if you plan to
-render that.
+`palmerpenguins` provides the penguins dataset used throughout the labs and the reference app, so
+install it from the start (it is not optional).
 
 ## How to run each lab
 
@@ -63,16 +63,16 @@ Create a folder `myapp/` with an `app.R` that you build up step by step, then ru
 shiny::runApp("myapp")
 ```
 
-Copy `apps/penguins-app/penguins.csv` beside your `app.R` when you reach the file-input step, so
-the app can read it with `readr::read_csv("penguins.csv")`.
+Load the penguins data from the `palmerpenguins` package (`palmerpenguins::penguins`) inside your
+`app.R`; there is no separate CSV file to copy.
 
 ### Lab 3 — From a Shiny app to Shinylive
 
-Export your app (or the ready-made `apps/penguins-app/`) to a static site and serve it. Run R
-from the workshop root:
+Export your app (or the ready-made `example-app/`) to a static site and serve it. Run R from the
+workshop root:
 
 ```r
-shinylive::export("apps/penguins-app", "site")
+shinylive::export("example-app", "site")
 httpuv::runStaticServer("site")
 ```
 
@@ -105,5 +105,7 @@ cd slides && quarto render
 
 - The app and report code is **public** once published (code + data live in the browser). Never
   put API keys or passwords in this material.
-- WASM-safe R packages (`shiny`, `dplyr`, `ggplot2`, `readr`) run in the reader's browser; the
-  others (`gt`, `shinylive`, `httpuv`) are used on the host or at build time only.
+- Packages run in the reader's browser (`shiny`, `dplyr`, `ggplot2`, `readr`, `palmerpenguins`);
+  the others (`gt`, `shinylive`, `httpuv`, `renv`) are used on the host or at build time. Most of
+  them also have WASM builds — the distinction is where *this* material uses them, not whether a
+  webR build exists.

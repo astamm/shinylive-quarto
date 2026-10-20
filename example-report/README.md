@@ -6,7 +6,7 @@ entirely in the reader's browser via webR. The rendered output is **plain static
 (`report.html` + `report_files/` + the service worker), so it deploys on any static host.
 
 It is the "report" half of the Shinylive story. See the standalone-app half in
-`apps/penguins-app/`, which is exported with `shinylive::export()` instead.
+`example-app/`, which is exported with `shinylive::export()` instead.
 
 ## Render
 

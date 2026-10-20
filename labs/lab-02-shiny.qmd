@@ -1,7 +1,9 @@
 ---
 title: "Lab 2 · Shiny fundamentals"
 author: "Workshop participant"
-format: html
+format:
+  html:
+    code-tools: true
 editor: source
 ---
 
@@ -9,13 +11,13 @@ editor: source
 
 Build a small but complete Shiny app from scratch: UI + server, an input wired to an output,
 a reactive expression, and (stretch) an uploaded file. You will reconstruct, step by step,
-the `apps/penguins-app/app.R` used later for Shinylive.
+the `example-app/app.R` used later for Shinylive.
 
 **Recommended setup:** create a folder `myapp/` and inside it a file `app.R` that you fill in
 at each step. Run it with the **Run App** button (RStudio / Positron), or `shiny::runApp("myapp")`.
 
-The bundled dataset is at `apps/penguins-app/penguins.csv`; copy it beside your `app.R`
-so the app can read it with `readr::read_csv("penguins.csv")`.
+Load the penguins data from the `palmerpenguins` package (`palmerpenguins::penguins`); there is
+no bundled CSV file. If you do not have the package, install it with `install.packages("palmerpenguins")`.
 
 ---
 
@@ -62,7 +64,7 @@ Drag the slider. The text updates. Notice: `input$bins` reads the slider, `outpu
 Instead of producing text with `renderText()` as `output$msg`, produce a histogram with `renderPlot()` as `output$hist` using the following code:
 
 ```r
-penguins <- readr::read_csv("penguins.csv", show_col_types = FALSE)
+penguins <- palmerpenguins::penguins
 
 penguins |>
   ggplot(aes(body_mass_g)) +
@@ -75,7 +77,7 @@ penguins |>
 
 Do not forget to pre-load the {ggplot2} package.
 
-This effectively uses the bundled penguins dataset, and lets the slider control the number of bins. Then, update the UI to show the plot instead of the text using `plotOutput()`.
+This effectively uses the palmerpenguins dataset, and lets the slider control the number of bins. Then, update the UI to show the plot instead of the text using `plotOutput()`.
 
 ## 4. Add a second decoration
 
@@ -91,7 +93,7 @@ Reading the data inside `renderPlot()` re-reads the file every time. Move it int
 
 ```r
 server <- function(input, output, session) {
-  penguins <- readr::read_csv("penguins.csv", show_col_types = FALSE)
+  penguins <- palmerpenguins::penguins
 
   df <- reactive(penguins)
 
@@ -134,8 +136,13 @@ bundled data ever leave the app**: this is the property that matters for Shinyli
 
 ## 8. Compare with the reference
 
-Open `apps/penguins-app/app.R`. Yours should look very similar. Keep your version, as it
+Open `example-app/app.R`. Yours should look very similar. Keep your version, as it
 does not need to match exactly. If you are stuck, copy the reference and read through it.
+The full reference app is embedded below so this lab stays in sync with the source:
+
+```r
+{{< include ../example-app/app.R >}}
+```
 
 ## 9. Conclusion
 
