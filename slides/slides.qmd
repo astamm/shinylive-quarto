@@ -1201,10 +1201,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Export Shinylive site
         run: Rscript -e 'renv::restore(); shinylive::export(".", "site")'
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with: { path: "site" }
   deploy:
     needs: build
@@ -1213,7 +1213,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 ```
 :::
 
@@ -1227,11 +1227,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: quarto-dev/quarto-actions/setup@v2
       - name: Render report
         run: quarto render report.qmd
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with: { path: "_output" }
   deploy:
     needs: build
@@ -1239,7 +1239,7 @@ jobs:
     environment: { name: github-pages }
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v5
 ```
 :::
 :::
