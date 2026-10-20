@@ -414,6 +414,57 @@ report.qmd (editor)
 :::
 :::
 
+## Callouts
+
+Quarto can emphasise a note, a tip, a warning with a **callout** (fenced div with a `callout-*` class). Five built-ins: `note`, `tip`, `important`, `warning`, `caution`.
+
+::: {.columns}
+
+::: {.column}
+```{.markdown}
+::: {.callout-tip title="Tip"}
+Your note, tip, warning or caution goes here.
+:::
+```
+
+::: {.callout-tip title="Tip"}
+Your note, tip, warning or caution goes here.
+:::
+
+```{.markdown}
+::: {.callout-caution title="Caution"}
+Your note, tip, warning or caution goes here.
+:::
+```
+
+::: {.callout-caution title="Caution"}
+Your note, tip, warning or caution goes here.
+:::
+:::
+
+::: {.column}
+```{.markdown}
+::: {.callout-warning title="Warning"}
+Your note, tip, warning or caution goes here.
+:::
+```
+
+::: {.callout-warning title="Warning"}
+Your note, tip, warning or caution goes here.
+:::
+
+```{.markdown}
+::: {.callout-important title="Important"}
+Your note, tip, warning or caution goes here.
+:::
+```
+
+::: {.callout-important title="Important"}
+Your note, tip, warning or caution goes here.
+:::
+:::
+:::
+
 ## Why Quarto for our purpose
 
 For this workshop, Quarto matters for **three** reasons that build toward the final goal:
