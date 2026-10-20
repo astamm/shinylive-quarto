@@ -1,5 +1,6 @@
 ---
 format: html
+server: shiny   # Qmd: live Shiny in a document
 ---
 
 ```{r}

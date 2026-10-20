@@ -378,7 +378,7 @@ gt_dark(data.frame(
 
 ## From R Markdown to Quarto in practice
 
-Converting an existing analysis is mostly mechanical. The same code, a few renamed keys:
+Converting existing analysis is mechanical. Same code, few renamed keys:
 
 ::: {style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:14px;"}
 ::: {.codewindow .md width="100%"}
@@ -396,6 +396,7 @@ analysis.qmd
 
 - `output:` becomes nested `format:`.
 - `{r, opt=}` headers become `#| opt:` lines.
+- Live Shiny: Rmd's `runtime: shiny` is renamed to `server: shiny` in Qmd.
 
 ## Cross-references and citations
 
@@ -420,7 +421,7 @@ For this workshop, Quarto matters for **three** reasons that build toward the fi
 ::: {.spread .spread-md .spread-evenly}
 [**Structured reports.**]{.hl-draft} Text, code and figures interleaved in one reproducible document.
 
-[**Embedded interactivity.**]{.hl-review} Either live Shiny (`runtime: shiny`) on a server, or Shinylive blocks (or Observable JS) that run in the browser.
+[**Embedded interactivity.**]{.hl-review} Either live Shiny (`server: shiny` in Qmd) on a server, or Shinylive blocks (or Observable JS) that run in the browser.
 
 [**Static output.**]{.hl-release} A rendered Quarto HTML page is plain files, ready for any static host.
 :::
@@ -629,13 +630,13 @@ server-backed route first:
 
 ### Live (server-backed)
 
-`runtime: shiny` in the YAML serves a live app from an **R process**, so it needs a server.
+`server: shiny` in the YAML serves a live app from an **R process**, so it needs a server (Old R Markdown `runtime: shiny` became `server: shiny` in Shiny).
 
 ```yaml
 ---
 title: "My live app"
 format: html
-runtime: shiny
+server: shiny
 ---
 ```
 
@@ -675,7 +676,7 @@ App code goes in **`{shinylive-r}` chunks**. We write our first one in the next 
 - Shiny = **UI + server** wired through a **reactive graph**.
 - Inputs change → reactives recompute → outputs re-render, minimally.
 - `req()` and `reactive()` keep apps robust and lean.
-- In Quarto, **`runtime: shiny`** needs a server; our goal is the **static** route.
+- In Quarto, **`server: shiny`** needs a server; our goal is the **static** route.
 
 ::: {.callout-tip title="Shiny is not just R"}
 A **Python** flavour of Shiny exists too, with the same ideas in another language.

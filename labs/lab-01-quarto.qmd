@@ -89,7 +89,8 @@ Render again. The output should now move into `_output/` and gain a table of con
 
 Answer these in a short paragraph (as comment lines or prose):
 
-1. What is the practical difference between `runtime: shiny` and a Shinylive block? (Answer
+1. What is the practical difference between live Shiny in a document (`server: shiny` in Qmd,
+   previously `runtime: shiny` in R Markdown) and a Shinylive block? (Answer
    comes later in the workshop, but note your guess now.)
 2. Why does "rendered output is plain files" matter for the rest of the workshop?
 

@@ -1,5 +1,6 @@
 ---
 output: html_document
+runtime: shiny   # Rmd: live Shiny in a document
 ---
 
 ```{r, echo = FALSE}
