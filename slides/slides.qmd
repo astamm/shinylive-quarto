@@ -640,8 +640,7 @@ server: shiny
 ---
 ```
 
-App code goes in **regular `{r}` chunks**; the reactive logic sits in an `{r}` chunk marked
-`#| context: server`.
+App code goes in **regular `{r}` chunks**; the reactive logic sits in an `{r}` chunk (plain for UI elements, with `#| context: server` option for server).
 
 ### Static (Shinylive, our goal)
 
@@ -666,12 +665,13 @@ App code goes in **`{shinylive-r}` chunks**. We write our first one in the next 
 **Work through `labs/lab-02-shiny.qmd`.** It builds your first Shiny app step by step:
 
 1. The two-piece skeleton (UI + server), run it with **Run App**.
-2. Add an input and a text output, then turn it into a histogram.
+2. Add an input and a text output and turn it into a histogram.
 3. Add a second input (a `selectInput`) and a reactive expression.
-4. (Stretch) Handle an uploaded CSV with `fileInput` and `readr::read_csv`.
+4. (Stretch) Update UI elements dynamically.
+5. (Stretch) Handle an uploaded CSV with `fileInput` and `readr::read_csv`.
 :::
 
-## Summary and the question
+## Summary and breakthrough
 
 - Shiny = **UI + server** wired through a **reactive graph**.
 - Inputs change → reactives recompute → outputs re-render, minimally.
@@ -759,7 +759,7 @@ already includes.
 
 - Languages like C, C++, Rust, R are **compiled to `.wasm` files**.
 - The browser runs them at near-native speed, isolated from the page.
-- It powers heavy in-browser apps: editors, games, and now statistical computing.
+- It powers heavy in-browser apps: softs and web apps (Google Earth, AutoCAD, TensorFlow), games (Unity 3D engine, Doom, GameBoy), smartphone apps, and now statistical computing.
 
 ### Why it matters here
 
@@ -1161,7 +1161,7 @@ Be honest about the trade-offs before committing to Shinylive:
 ::: {.incremental .highlight-last}
 - **Load time**: first visit downloads webR + packages; expect a multi-second start.
 - **Package availability**: only WASM-built packages work; no system libs, no raw sockets.
-- **Network**: no direct databases; HTTP calls are subject to the host's CORS rules.
+- **Network**: no direct databases; HTTP calls are subject to the host's cross-origin resource-sharing (CORS) rules.
 - **Data size**: ship data to the browser, so keep payloads small (a few MB max).
 - **Secrecy**: the code your reader can run is code they can read.
 :::
@@ -1183,9 +1183,11 @@ A reusable workflow (`posit-dev/r-shinylive`, `deploy-app.yaml`) runs on push:
 
 ### Quarto doc → Pages
 
-- `quarto publish gh-pages` from a workflow; or,
-- `quarto add quarto-ext/shinylive`
-+ `quarto render` then a Pages deploy action.
+- `quarto publish gh-pages` from a workflow;
+- Or:
+
+  - `quarto add quarto-ext/shinylive`
+  - `quarto render` then a Pages deploy action.
 
 :::
 
@@ -1218,7 +1220,7 @@ jobs:
 ```
 :::
 
-::: {.editor .yaml .fragment name="report.yaml"}
+::: {.editor .yaml .fragment name="deploy-report.yaml"}
 ```yaml
 name: Deploy report
 on:
