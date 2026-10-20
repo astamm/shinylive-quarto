@@ -1,0 +1,12 @@
+/.quarto/
+/_site/
+/build/
+
+# Staged artifact output produced by build-site.sh
+/slides/
+/labs/
+/apps/
+/example-report/
+/material.zip
+
+**/*.quarto_ipynb

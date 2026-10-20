@@ -2,11 +2,17 @@ project:
   type: website
   render:
     - index.qmd
-  pre-render: build-site.sh
+  pre-render: ./build-site.sh
   output-dir: _site
   resources:
-    # Whatever build-site.sh leaves in build/ is copied into _site as-is.
-    - build/**
+    # build-site.sh renders each artifact into a site-local staging folder;
+    # Quarto copies each into the _site root, so the deployed site's nav links
+    # (slides/slides.html, labs/..., apps/..., example-report/...) resolve.
+    - slides/**
+    - labs/**
+    - apps/**
+    - example-report/**
+    - material.zip
 
 website:
   title: "Serverless Interactive Reporting"

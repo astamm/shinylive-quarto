@@ -7,6 +7,17 @@ A 2-hour, hands-on workshop introducing **Quarto** and **Shinylive** for serverl
 reporting. All content is in English. Start with the [slides](slides/slides.html), then follow
 the labs in order.
 
+::: callout-tip
+**Want to follow along?** [Download the workshop material](material.zip) (ZIP archive) to get
+all the code, examples, and data on your own machine, no git needed.
+
+- **Windows:** right-click the ZIP, choose *Extract All*, then open the `shinylive-quarto` folder.
+- **macOS:** double-click the ZIP to unzip it, then open the `shinylive-quarto` folder.
+
+Open the extracted folder as a project in **RStudio** (File, New Project, Existing Directory) or
+**Positron** (File, Open Folder), then work through the labs in order.
+:::
+
 ## The one idea
 
 Shinylive output is **static**: the host serves files, and the reader's browser runs the R via
