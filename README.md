@@ -21,7 +21,7 @@ cost.
 | `labs/lab-02-shiny.qmd` | Lab 2 · Build a Shiny app from scratch |
 | `labs/lab-03-shinylive.qmd` | Lab 3 · Export a Shiny app to Shinylive |
 | `labs/lab-04-shinylive-quarto.qmd` | Lab 4 · An interactive report, hosted statically |
-| `examples/` | Standalone example docs used by the deck's embedded iframes |
+| `example-qmd/` | A minimal standalone Quarto doc (`hello.qmd`) used by the deck's embedded iframes |
 | `example-app/` | The reference Shiny app (`app.R`, dataset from `palmerpenguins`) |
 | `example-report/` | A working interactive Quarto report (prose + live widgets) |
 
@@ -69,15 +69,16 @@ Load the penguins data from the `palmerpenguins` package (`palmerpenguins::pengu
 ### Lab 3 — From a Shiny app to Shinylive
 
 Export your app (or the ready-made `example-app/`) to a static site and serve it. Run R from the
-workshop root:
+workshop root. Use a destination folder that is not `site/` (that folder is the workshop's own
+website build), for example `_site/`:
 
 ```r
-shinylive::export("example-app", "site")
-httpuv::runStaticServer("site")
+shinylive::export("example-app", "_site")
+httpuv::runStaticServer("_site")
 ```
 
 Open the printed URL (for example http://127.0.0.1:8008). The first load is slow (webR download);
-reload afterwards. The `site/` folder now runs the app in the browser with no R process.
+reload afterwards. The `_site/` folder now runs the app in the browser with no R process.
 
 ### Lab 4 — An interactive report, hosted statically
 

@@ -267,7 +267,7 @@ A minimal Quarto document is barely more than YAML + one code chunk.
 ::: {style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:12px;"}
 ::: {.codewindow .md width="100%"}
 hello.qmd
-```{.markdown include="../examples/hello.qmd"}
+```{.markdown include="../example-qmd/hello.qmd"}
 ```
 :::
 
@@ -373,7 +373,7 @@ gt_dark(data.frame(
 ```
 
 ::: {.hands-on}
-**Quick check.** Open `examples/` and render the `hello.qmd` example to HTML. Confirm the output file appears next to the source.
+**Quick check.** Open `example-qmd/` and render the `hello.qmd` example to HTML. Confirm the output file appears next to the source.
 :::
 
 ## From R Markdown to Quarto in practice
@@ -872,7 +872,7 @@ run Shiny in the browser via webR, as files you can drop on any static host.
 ::: {.codewindow .r width="75%"}
 export.R
 ```r
-shinylive::export("app", "site")  # app folder -> static site/
+shinylive::export("app", "_site")  # app folder -> static site
 ```
 :::
 
@@ -939,8 +939,8 @@ Take the penguins app from the Shiny block. Exporting it is two lines:
 ::: {.codewindow .r width="70%"}
 export.R
 ```r
-shinylive::export("example-app", "site")
-httpuv::runStaticServer("site")
+shinylive::export("example-app", "_site")
+httpuv::runStaticServer("_site")
 ```
 :::
 
@@ -956,9 +956,9 @@ The result is plain files: drop them on GitHub Pages, Netlify, or any static hos
 ::: {.hands-on}
 **In `labs/lab-03-shinylive.qmd`:**
 
-1. Run `shinylive::export("example-app", "site")`.
-2. Serve locally with `httpuv::runStaticServer("site")` and open the URL. Confirm app runs in your browser, with **no R server involved**.
-3. Inspect exported `site/` folder: notice the payload files (WASM, JS).
+1. Run `shinylive::export("example-app", "_site")`.
+2. Serve locally with `httpuv::runStaticServer("_site")` and open the URL. Confirm app runs in your browser, with **no R server involved**.
+3. Inspect exported `_site/` folder: notice the payload files (WASM, JS).
 4. Optional: upload your own CSV and confirm **no network request** carries it (check the Network tab: the file never leaves).
 :::
 

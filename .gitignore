@@ -52,8 +52,8 @@ slides/examples/report_files/
 labs/lab-*.html
 labs/lab-*_files/
 # --- standalone examples / example report ---
-examples/hello.html
-examples/hello_files/
+example-qmd/hello.html
+example-qmd/hello_files/
 example-report/report.html
 example-report/report_files/
 

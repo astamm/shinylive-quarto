@@ -22,19 +22,20 @@ shiny::runApp(".")
 
 ## Export a static site with Shinylive
 
-Export the app folder to a `site/` directory, then serve it with a plain static server. The
-first export downloads the Shinylive webR assets (can take a minute):
+Export the app folder to a static directory, then serve it with a plain static server. The repo
+already has a `site/` folder (the workshop's website build), so use a different destination, for
+example `_site/`. The first export downloads the Shinylive webR assets (can take a minute):
 
 ```r
-shinylive::export("example-app", "site")
-httpuv::runStaticServer("site")
+shinylive::export("example-app", "_site")
+httpuv::runStaticServer("_site")
 ```
 
 Open the printed URL (for example http://127.0.0.1:8008). The app is fully interactive, with no
 R server running it. The first load is slow (webR download); reload afterwards. Inspect the
-`site/` folder: the `shinylive/` subfolder holds the JS, worker scripts, and `.wasm` binaries.
+`_site/` folder: the `shinylive/` subfolder holds the JS, worker scripts, and `.wasm` binaries.
 
-You can now drop the `site/` folder on GitHub Pages, Netlify, or any static host.
+You can now drop the `_site/` folder on GitHub Pages, Netlify, or any static host.
 
 ## Put it on GitHub with {usethis}
 

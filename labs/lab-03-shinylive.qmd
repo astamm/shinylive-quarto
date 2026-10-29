@@ -27,22 +27,24 @@ install.packages("shinylive")
 
 ## 2. Export your app
 
-Run R (console in your IDE) from the workshop root, and export your app folder to a `site` folder:
+Run R (console in your IDE) from the workshop root, and export your app folder to a static
+destination folder. The repo already has a `site/` folder (the workshop's website build), so use a
+different one, for example `_site`:
 
 ```r
-shinylive::export("example-app", "site")
+shinylive::export("example-app", "_site")
 ```
 
 The two arguments are the **source app folder** and the **destination folder**. `shinylive`
 walks the app, decides which R packages it needs, downloads the Shinylive web assets (including
-webR / WASM builds of those packages), and writes a fully static site into `site`.
+webR / WASM builds of those packages), and writes a fully static site into `_site`.
 
 ## 3. Serve it locally
 
 A static server just hands out files:
 
 ```r
-httpuv::runStaticServer("site")
+httpuv::runStaticServer("_site")
 ```
 
 Open the printed URL (for example http://127.0.0.1:8008) in a browser. Your Shiny app should
@@ -55,11 +57,11 @@ first load to feel the difference made by the browser cache.
 
 ## 4. Inspect the exported site
 
-Open the `site/` folder. You should see the app files plus a large `shinylive/` subfolder with
+Open the `_site/` folder. You should see the app files plus a large `shinylive/` subfolder with
 JavaScript, worker scripts, and `.wasm` binaries. This is the "web assets library" in action: the
 host only stores files; the browser runs them.
 
-Use your IDE's file explorer and, if curious, open `site/index.html` to see the bootstrapped page.
+Use your IDE's file explorer and, if curious, open `_site/index.html` to see the bootstrapped page.
 
 ## 5. Confirm data stays local (the privacy property)
 
@@ -80,7 +82,7 @@ Reproducible exports pin package versions with renv. The lifecycle is three comm
 ```r
 renv::init(project = "example-app")     # once: discovers deps, writes a renv.lock
 renv::snapshot(project = "example-app") # capture dependency updates into the lockfile
-shinylive::export("example-app", "site")
+shinylive::export("example-app", "_site")
 ```
 
 `shinylive::export()` reads the lockfile and bundles **exactly those versions** as WASM builds.

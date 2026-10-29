@@ -32,7 +32,7 @@ format_variable_unit <- function(var_names, unit_mapping) {
     clean_name <- gsub("(?<=[a-z])(?=[A-Z])", " ", clean_name, perl = TRUE)
     clean_name <- gsub("[_-]", " ", clean_name) # Replace separators with spaces
     clean_name <- trimws(clean_name)            # Clean extra spaces
-    clean_name <- stringr::str_to_title(clean_name)
+    clean_name <- tools::toTitleCase(clean_name)
 
     if (length(matched_key) > 0) {
       return(paste0(clean_name, " (", unit_mapping[[matched_key]], ")"))
@@ -91,7 +91,7 @@ server <- function(input, output, session) {
   output$hist <- renderPlot({
     req(input$variable)
     df() |>
-      tidyr::drop_na() |> 
+      na.omit() |> 
       ggplot(aes(.data[[input$variable]])) +
       geom_histogram(
         bins = input$bins, 
